@@ -63,13 +63,13 @@ export default function App() {
   };
 
   const handleVoiceCommand = (transcript: string) => {
-    addLog(`Dengar: "${transcript}"`, 'command');
+    addLog(`🎤 Terdengar: "${transcript}"`, 'command');
     const { path, logText } = parseVoiceCommand(transcript);
     
     if (path) {
       handleCommand(path, logText, true);
     } else {
-      addLog(`Perintah suara tidak dikenali`, 'error');
+      addLog(`❌ Voice Command tidak dipahami`, 'error');
     }
   };
 

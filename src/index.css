@@ -11,5 +11,5 @@
 }
 
 body {
-  @apply bg-white text-zinc-950 antialiased;
+  @apply bg-[#FCFBF5] text-zinc-950 antialiased;
 }
