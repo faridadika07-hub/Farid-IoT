@@ -114,7 +114,7 @@ export default function App() {
       {/* Header & Config */}
       <header className="bg-zinc-950 px-4 md:px-8 lg:px-12 py-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-md border-b border-zinc-900">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Smart Control Hub</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Farid IoT</h1>
           <p className="text-zinc-400 font-mono text-sm">ESP32 IoT Dashboard with Voice Command</p>
         </div>
         
