@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Settings2, Wifi, WifiOff } from 'lucide-react';
-import { sendCommand, syncStatus, parseVoiceCommand } from './utils/api';
+import { Settings2, Wifi, WifiOff, Bell, BellOff } from 'lucide-react';
+import { sendCommand, syncStatus, parseVoiceCommand, sendTelegramNotification } from './utils/api';
 import { ActivityLogEntry, ESPStatus } from './types';
 import { RelayCard } from './components/RelayCard';
 import { VoiceControl } from './components/VoiceControl';
@@ -13,6 +13,7 @@ export default function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [logs, setLogs] = useState<ActivityLogEntry[]>([]);
+  const [enableTelegramNotif, setEnableTelegramNotif] = useState(true);
   
   const [status, setStatus] = useState<ESPStatus>({
     temperature: 0,
@@ -44,6 +45,11 @@ export default function App() {
       addLog(`${isVoice ? '(Voice) ' : ''}${logMessage}`, 'info');
       await sendCommand(ipAddress, path);
       addLog(`Perintah berhasil dieksekusi`, 'success');
+      
+      if (enableTelegramNotif) {
+        sendTelegramNotification(`🌐 Web Action:\n${logMessage}`);
+      }
+
       fetchSync(); // Sync state immediately
     } catch (error) {
       addLog(`Gagal: ${error instanceof Error ? error.message : 'Koneksi error'}`, 'error');
@@ -112,17 +118,31 @@ export default function App() {
           <p className="text-zinc-400 font-mono text-sm">ESP32 IoT Dashboard with Voice Command</p>
         </div>
         
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-2 flex items-center w-full md:w-80">
-          <div className="pl-3 pr-2 shadow-sm">
-            {isConnected ? <Wifi className="w-5 h-5 text-brand" /> : <WifiOff className="w-5 h-5 text-red-500" />}
+        <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+          <button 
+            onClick={() => setEnableTelegramNotif(!enableTelegramNotif)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-colors text-sm font-medium ${
+              enableTelegramNotif 
+                ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' 
+                : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-400'
+            }`}
+          >
+            {enableTelegramNotif ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
+            <span className="hidden md:inline">Notif</span>
+          </button>
+          
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-2 flex items-center w-full md:w-80">
+            <div className="pl-3 pr-2 shadow-sm">
+              {isConnected ? <Wifi className="w-5 h-5 text-brand" /> : <WifiOff className="w-5 h-5 text-red-500" />}
+            </div>
+            <input
+              type="text"
+              placeholder="IP Address ESP (e.g. 192.168.1.100)"
+              value={ipAddress}
+              onChange={handleIpChange}
+              className="bg-transparent border-none outline-none text-zinc-200 w-full placeholder-zinc-500 font-mono text-sm px-2 py-1"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="IP Address ESP (e.g. 192.168.1.100)"
-            value={ipAddress}
-            onChange={handleIpChange}
-            className="bg-transparent border-none outline-none text-zinc-200 w-full placeholder-zinc-500 font-mono text-sm px-2 py-1"
-          />
         </div>
       </header>
 

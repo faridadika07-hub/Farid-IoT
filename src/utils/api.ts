@@ -20,6 +20,28 @@ export const syncStatus = async (ip: string) => {
   return await res.json();
 };
 
+export const sendTelegramNotification = async (message: string) => {
+  const token = "8800775876:AAFFksNwh17FMwws13HgTn6jD4MMNp8-UdE";
+  const chatId = "8634626398";
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+      }),
+    });
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to send Telegram message", error);
+  }
+};
+
 export const parseVoiceCommand = (text: string) => {
   const cmd = text.toLowerCase();
   let path = null;
