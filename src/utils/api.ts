@@ -21,8 +21,8 @@ export const syncStatus = async (ip: string) => {
 };
 
 export const sendTelegramNotification = async (message: string) => {
-  const token = "8800775876:AAFFksNwh17FMwws13HgTn6jD4MMNp8-UdE";
-  const chatId = "8634626398";
+  const token = "8926668316:AAHhNa6LTwE_A5QzPB45NI3qFtex956tahU";
+  const chatId = "7444235247";
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
 
   try {
